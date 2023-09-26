@@ -79,13 +79,10 @@ class MyWebServer(socketserver.BaseRequestHandler):
             Function handler for 200 status code for any html files being accessed
             Returns as an exception
         """
-
         try:
             file = open(path, "r")
             content = file.read()
-            self.request.sendall(bytearray(self.OKHeader,'utf-8'))
-            self.request.sendall(b'Content-Type: text/html\r\n\r\n')
-            self.request.sendall(content)
+            self.request.sendall(bytearray(self.OKHeader + "Content-Type: text/html\r\n" + content,'utf-8'))
             return
         except Exception as e:
             self.invalidResource()
@@ -96,9 +93,7 @@ class MyWebServer(socketserver.BaseRequestHandler):
         try:
             file = open(path, "r")
             content = file.read()
-            self.request.sendall(bytearray(self.OKHeader,'utf-8'))
-            self.request.sendall(b'Content-Type: text/css\r\n\r\n')
-            self.request.sendall(content)
+            self.request.sendall(bytearray(self.OKHeader + "Content-Type: text/css\r\n" + content,'utf-8'))
             return
         except Exception as e:
             self.invalidResource()
@@ -119,7 +114,6 @@ class MyWebServer(socketserver.BaseRequestHandler):
         if ".css" not in path and ".html" not in path: # check if it is a directory 
             if path[-1] == "/": # for the requirement of path ending
                 path += "index.html"
-
             else: 
                 # results in a 301 status code
                 self.handleRedirect(path)
@@ -135,6 +129,7 @@ class MyWebServer(socketserver.BaseRequestHandler):
             self.invalidResource()
             return
 
+        return
         '''
         # Non working garbage
         try:
